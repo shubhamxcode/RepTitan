@@ -10,13 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardPostureRouteImport } from './routes/dashboard/posture'
+import { Route as DashboardHealthRouteImport } from './routes/dashboard/health'
+import { Route as DashboardGoalsRouteImport } from './routes/dashboard/goals'
 import { Route as AuthLoginRouteImport } from './routes/auth/Login'
 
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -29,6 +40,31 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPostureRoute = DashboardPostureRouteImport.update({
+  id: '/posture',
+  path: '/posture',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardHealthRoute = DashboardHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGoalsRoute = DashboardGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/Login',
   path: '/auth/Login',
@@ -38,33 +74,81 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
+  '/dashboard/goals': typeof DashboardGoalsRoute
+  '/dashboard/health': typeof DashboardHealthRoute
+  '/dashboard/posture': typeof DashboardPostureRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
+  '/dashboard/goals': typeof DashboardGoalsRoute
+  '/dashboard/health': typeof DashboardHealthRoute
+  '/dashboard/posture': typeof DashboardPostureRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
+  '/dashboard/goals': typeof DashboardGoalsRoute
+  '/dashboard/health': typeof DashboardHealthRoute
+  '/dashboard/posture': typeof DashboardPostureRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/docs' | '/auth/Login'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/docs'
+    | '/auth/Login'
+    | '/dashboard/goals'
+    | '/dashboard/health'
+    | '/dashboard/posture'
+    | '/dashboard/settings'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/docs' | '/auth/Login'
-  id: '__root__' | '/' | '/about' | '/docs' | '/auth/Login'
+  to:
+    | '/'
+    | '/about'
+    | '/docs'
+    | '/auth/Login'
+    | '/dashboard/goals'
+    | '/dashboard/health'
+    | '/dashboard/posture'
+    | '/dashboard/settings'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/docs'
+    | '/auth/Login'
+    | '/dashboard/goals'
+    | '/dashboard/health'
+    | '/dashboard/posture'
+    | '/dashboard/settings'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DocsRoute: typeof DocsRoute
   AuthLoginRoute: typeof AuthLoginRoute
 }
@@ -76,6 +160,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -92,6 +183,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/posture': {
+      id: '/dashboard/posture'
+      path: '/posture'
+      fullPath: '/dashboard/posture'
+      preLoaderRoute: typeof DashboardPostureRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/health': {
+      id: '/dashboard/health'
+      path: '/health'
+      fullPath: '/dashboard/health'
+      preLoaderRoute: typeof DashboardHealthRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/goals': {
+      id: '/dashboard/goals'
+      path: '/goals'
+      fullPath: '/dashboard/goals'
+      preLoaderRoute: typeof DashboardGoalsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/auth/Login': {
       id: '/auth/Login'
       path: '/auth/Login'
@@ -102,9 +228,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardGoalsRoute: typeof DashboardGoalsRoute
+  DashboardHealthRoute: typeof DashboardHealthRoute
+  DashboardPostureRoute: typeof DashboardPostureRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardGoalsRoute: DashboardGoalsRoute,
+  DashboardHealthRoute: DashboardHealthRoute,
+  DashboardPostureRoute: DashboardPostureRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DocsRoute: DocsRoute,
   AuthLoginRoute: AuthLoginRoute,
 }

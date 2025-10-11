@@ -40,6 +40,13 @@ function RootComponent() {
 		select: (s) => s.isLoading,
 	});
 
+	const location = useRouterState({
+		select: (s) => s.location.pathname,
+	});
+
+	// Hide header/footer on dashboard pages
+	const isDashboard = location.startsWith("/dashboard");
+
 	return (
 		<>
 			<HeadContent />
@@ -49,11 +56,11 @@ function RootComponent() {
 				disableTransitionOnChange
 				storageKey="vite-ui-theme"
 			>
-				<Header />
+				{!isDashboard && <Header />}
 				<main>
 					{isFetching ? <Loader /> : <Outlet />}
 				</main>
-				<Footer />
+				{!isDashboard && <Footer />}
 				<Toaster richColors />
 			</ThemeProvider>
 			<TanStackRouterDevtools position="bottom-left" />
