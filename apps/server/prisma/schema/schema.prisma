@@ -13,10 +13,63 @@ datasource db {
 model User{
   id Int @id @default(autoincrement())
   email String @unique
-  password String?
   name String
   googleId String? @unique
   provider String @default("local")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  goalDetail UserGoalDetail?
+  exerciseSessions ExerciseSession[]
+}
+
+model UserGoalDetail{
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // User Input Data
+  goal String // "weight_loss", "weight_gain", "healthy_body"
+  gender String
+  age Int
+  height Float
+  currentWeight Float
+  targetWeight Float
+  activityLevel String
+  
+  // Calculated Nutrition Plan
+  bmi Float
+  bmiCategory String
+  bmr Int
+  tdee Int
+  targetCalories Int
+  protein Int
+  carbs Int
+  fats Int
+  waterIntake Int
+  weightDifference Float
+  estimatedWeeks Int
+  exerciseRecommendation String
+  goalTimeline String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ExerciseSession{
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Exercise Details
+  exerciseType String // "pushup", "squat", "plank"
+  repsCompleted Int @default(0) // Number of reps for pushup/squat, 0 for plank
+  duration Int // Duration in seconds
+  caloriesBurned Int @default(0) // Estimated calories burned
+  averageFormQuality Float @default(0) // Average form quality percentage (0-100)
+  
+  // Session Metadata
+  sessionDate DateTime @default(now())
+  createdAt DateTime @default(now())
+  
+  @@index([userId, sessionDate])
 }

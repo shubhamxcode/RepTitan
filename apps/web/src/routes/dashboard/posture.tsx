@@ -1,181 +1,180 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Activity, AlertCircle, Camera, Play, Pause } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 import { useState } from "react";
+import { ExerciseTracker } from "@/components/ExerciseTracker";
+import type { ExerciseType } from "@/lib/exerciseDetection";
 
 export const Route = createFileRoute("/dashboard/posture")({
-	component: PostureCorrector,
+	component: WorkoutTracker,
 });
 
-function PostureCorrector() {
-	const [isTracking, setIsTracking] = useState(false);
+const EXERCISES: { type: ExerciseType; name: string; icon: string; description: string }[] = [
+	{
+		type: "pushup",
+		name: "Push-ups",
+		icon: "💪",
+		description: "Upper body strength and core stability",
+	},
+	{
+		type: "squat",
+		name: "Squats",
+		icon: "🦵",
+		description: "Lower body strength and mobility",
+	},
+	{
+		type: "plank",
+		name: "Plank",
+		icon: "🏋️",
+		description: "Core strength and stability",
+	},
+];
+
+function WorkoutTracker() {
+	const [selectedExercise, setSelectedExercise] = useState<ExerciseType | null>(null);
+
+	if (selectedExercise) {
+		return (
+			<div className="space-y-6">
+				<Button
+					onClick={() => setSelectedExercise(null)}
+					variant="outline"
+					className="gap-2"
+				>
+					← Back to Exercises
+				</Button>
+				<ExerciseTracker exerciseType={selectedExercise} />
+			</div>
+		);
+	}
 
 	return (
 		<div className="space-y-8">
 			{/* Header */}
 			<div>
-				<h1 className="text-3xl font-bold text-foreground">Posture Corrector</h1>
+				<h1 className="text-3xl font-bold text-foreground">AI Workout Tracker</h1>
 				<p className="text-muted-foreground mt-2">
-					Monitor and improve your posture in real-time
+					Select an exercise to start tracking with real-time AI form correction
 				</p>
 			</div>
 
-			{/* Main Tracking Card */}
-			<Card>
-				<CardContent className="pt-6">
-					<div className="flex flex-col items-center justify-center py-12 space-y-6">
-						<div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
-							<Camera className="size-16 text-muted-foreground" />
-						</div>
-						<div className="text-center space-y-2">
-							<h3 className="text-xl font-semibold text-foreground">
-								{isTracking ? "Tracking Your Posture" : "Ready to Start"}
-							</h3>
-							<p className="text-sm text-muted-foreground max-w-md">
-								{isTracking
-									? "Keep your back straight and shoulders relaxed. We're monitoring your posture."
-									: "Click the button below to start monitoring your posture using your webcam."}
-							</p>
-						</div>
-						<Button
-							size="lg"
-							onClick={() => setIsTracking(!isTracking)}
-							className="gap-2"
-						>
-							{isTracking ? (
-								<>
-									<Pause className="size-5" />
-									Stop Tracking
-								</>
-							) : (
-								<>
-									<Play className="size-5" />
+			{/* Exercise Selection Grid */}
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{EXERCISES.map((exercise) => (
+					<Card
+						key={exercise.type}
+						className="group cursor-pointer hover:shadow-lg hover:border-primary transition-all duration-200"
+						onClick={() => setSelectedExercise(exercise.type)}
+					>
+						<CardContent className="pt-6">
+							<div className="flex flex-col items-center text-center space-y-4">
+								<div className="text-6xl">{exercise.icon}</div>
+								<div className="space-y-2">
+									<h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+										{exercise.name}
+									</h3>
+									<p className="text-sm text-muted-foreground">
+										{exercise.description}
+									</p>
+								</div>
+								<Button className="w-full gap-2 group-hover:scale-105 transition-transform">
+									<Dumbbell className="size-4" />
 									Start Tracking
-								</>
-							)}
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				))}
+			</div>
 
-			{/* Stats Grid */}
+			{/* Info Cards */}
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<Card>
-					<CardHeader>
-						<CardTitle className="text-lg">Today's Session</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-2">
-							<p className="text-3xl font-bold text-foreground">45 min</p>
-							<p className="text-sm text-muted-foreground">Active tracking time</p>
+					<CardContent className="pt-6">
+						<div className="text-center space-y-2">
+							<div className="text-4xl mb-2">🎥</div>
+							<h3 className="font-semibold text-foreground">Real-time Tracking</h3>
+							<p className="text-sm text-muted-foreground">
+								Uses your webcam to track body movements in real-time
+							</p>
 						</div>
 					</CardContent>
 				</Card>
 
 				<Card>
-					<CardHeader>
-						<CardTitle className="text-lg">Posture Score</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-2">
-							<p className="text-3xl font-bold text-foreground">78%</p>
-							<p className="text-sm text-muted-foreground">Good posture maintained</p>
+					<CardContent className="pt-6">
+						<div className="text-center space-y-2">
+							<div className="text-4xl mb-2">✅</div>
+							<h3 className="font-semibold text-foreground">Form Correction</h3>
+							<p className="text-sm text-muted-foreground">
+								Get instant feedback on your exercise form and posture
+							</p>
 						</div>
 					</CardContent>
 				</Card>
 
 				<Card>
-					<CardHeader>
-						<CardTitle className="text-lg">Alerts</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-2">
-							<p className="text-3xl font-bold text-foreground">8</p>
-							<p className="text-sm text-muted-foreground">Posture corrections today</p>
+					<CardContent className="pt-6">
+						<div className="text-center space-y-2">
+							<div className="text-4xl mb-2">📊</div>
+							<h3 className="font-semibold text-foreground">Track Progress</h3>
+							<p className="text-sm text-muted-foreground">
+								Automatic rep counting and session statistics
+							</p>
 						</div>
 					</CardContent>
 				</Card>
 			</div>
 
-			{/* Tips and Guidelines */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				<Card>
-					<CardHeader>
-						<CardTitle>Posture Tips</CardTitle>
-						<CardDescription>Follow these guidelines for better posture</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-4">
-							{[
-								"Keep your back straight and shoulders back",
-								"Your feet should be flat on the floor",
-								"Monitor should be at eye level",
-								"Take breaks every 30 minutes",
-								"Avoid slouching or leaning forward",
-							].map((tip, idx) => (
-								<div key={idx} className="flex items-start gap-3">
-									<div className="mt-0.5 p-1 rounded-full bg-primary/10">
-										<div className="w-2 h-2 rounded-full bg-primary" />
-									</div>
-									<p className="text-sm text-muted-foreground">{tip}</p>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle>Recent Sessions</CardTitle>
-						<CardDescription>Your posture tracking history</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-4">
-							{[
-								{ date: "Today", score: 78, duration: "45 min" },
-								{ date: "Yesterday", score: 82, duration: "1h 20 min" },
-								{ date: "2 days ago", score: 75, duration: "50 min" },
-								{ date: "3 days ago", score: 88, duration: "1h 15 min" },
-							].map((session, idx) => (
-								<div
-									key={idx}
-									className="flex items-center justify-between py-3 border-b border-border last:border-0"
-								>
-									<div>
-										<p className="text-sm font-medium text-foreground">
-											{session.date}
-										</p>
-										<p className="text-xs text-muted-foreground">
-											{session.duration}
-										</p>
-									</div>
-									<div className="text-right">
-										<p className="text-sm font-semibold text-foreground">
-											{session.score}%
-										</p>
-										<p className="text-xs text-muted-foreground">Score</p>
-									</div>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-
-			{/* Alert Banner */}
-			<Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/20">
+			{/* Tips */}
+			<Card>
 				<CardContent className="pt-6">
-					<div className="flex items-start gap-3">
-						<AlertCircle className="size-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-						<div>
-							<p className="text-sm font-medium text-blue-900 dark:text-blue-100">
-								Camera Permission Required
-							</p>
-							<p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-								To use the posture corrector, please allow access to your webcam in your
-								browser settings.
-							</p>
+					<h3 className="font-semibold text-foreground mb-4">Tips for Best Results</h3>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="flex items-start gap-3">
+							<div className="mt-0.5 p-1 rounded-full bg-primary/10">
+								<div className="w-2 h-2 rounded-full bg-primary" />
+							</div>
+							<div>
+								<p className="text-sm font-medium text-foreground">Good Lighting</p>
+								<p className="text-xs text-muted-foreground">
+									Ensure you have adequate lighting for better tracking
+								</p>
+							</div>
+						</div>
+						<div className="flex items-start gap-3">
+							<div className="mt-0.5 p-1 rounded-full bg-primary/10">
+								<div className="w-2 h-2 rounded-full bg-primary" />
+							</div>
+							<div>
+								<p className="text-sm font-medium text-foreground">Full Body Visible</p>
+								<p className="text-xs text-muted-foreground">
+									Position yourself so your entire body is in frame
+								</p>
+							</div>
+						</div>
+						<div className="flex items-start gap-3">
+							<div className="mt-0.5 p-1 rounded-full bg-primary/10">
+								<div className="w-2 h-2 rounded-full bg-primary" />
+							</div>
+							<div>
+								<p className="text-sm font-medium text-foreground">Side View</p>
+								<p className="text-xs text-muted-foreground">
+									Position camera to the side for best angle detection
+								</p>
+							</div>
+						</div>
+						<div className="flex items-start gap-3">
+							<div className="mt-0.5 p-1 rounded-full bg-primary/10">
+								<div className="w-2 h-2 rounded-full bg-primary" />
+							</div>
+							<div>
+								<p className="text-sm font-medium text-foreground">Clear Background</p>
+								<p className="text-xs text-muted-foreground">
+									Use a plain background for accurate pose detection
+								</p>
+							</div>
 						</div>
 					</div>
 				</CardContent>

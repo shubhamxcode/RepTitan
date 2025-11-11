@@ -16,7 +16,7 @@ import { useState } from "react";
 
 const navItems = [
 	{ to: "/dashboard", label: "Home", icon: Home },
-	{ to: "/dashboard/posture", label: "Posture Corrector", icon: Activity },
+	{ to: "/dashboard/posture", label: "AI Workout Tracker", icon: Activity },
 	{ to: "/dashboard/health", label: "Health", icon: Heart },
 	{ to: "/dashboard/goals", label: "Your Goals", icon: Target },
 	{ to: "/dashboard/settings", label: "Settings", icon: Settings },
@@ -54,7 +54,7 @@ export default function DashboardLayout() {
 						<div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
 							<span className="text-primary-foreground font-black text-lg">R</span>
 						</div>
-						<span className="text-xl font-bold text-foreground">RepTitan</span>
+						<Link to="/" className="text-xl font-bold text-foreground">RepTitan</Link>
 					</div>
 
 					{/* User Info */}

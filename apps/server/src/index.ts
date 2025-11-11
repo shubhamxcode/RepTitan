@@ -4,13 +4,14 @@ import express from "express";
 import session from "express-session";
 import passport from "./config/passport.js";
 import authRouter from "./routers/auth.js";
+import goalsRouter from "./routers/goals.js";
 
 const app = express();
 
 app.use(
 	cors({
 		origin: process.env.CORS_ORIGIN || "",
-		methods: ["GET", "POST", "OPTIONS"],
+		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 		credentials: true,
 	}),
 );
@@ -37,6 +38,7 @@ app.use(passport.session());
 
 // Routes
 app.use("/auth", authRouter);
+app.use("/goals", goalsRouter);
 
 app.get("/", (_req, res) => {
 	res.status(200).send("OK");
