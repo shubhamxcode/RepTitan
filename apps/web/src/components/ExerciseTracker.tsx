@@ -10,6 +10,7 @@ import {
 } from '@/lib/exerciseDetection';
 import type { ExerciseType, ExerciseStats } from '@/lib/exerciseDetection';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '@/lib/api';
 
 interface ExerciseTrackerProps {
   exerciseType: ExerciseType;
@@ -56,9 +57,8 @@ export const ExerciseTracker = ({ exerciseType }: ExerciseTrackerProps) => {
   >(undefined);
   const videoContainerRef = useRef<HTMLDivElement>(null);
 
-  // API Base URL
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
   // For demo purposes, using userId = 1
+  // In production, get this from auth context/session
   const userId = 1;
 
   // Initialize detector based on exercise type
@@ -139,7 +139,7 @@ export const ExerciseTracker = ({ exerciseType }: ExerciseTrackerProps) => {
         ? (formQualityHistory.filter((f) => f).length / formQualityHistory.length) * 100
         : 0;
 
-      const response = await fetch(`${API_URL}/goals/exercise/save`, {
+      const response = await fetch(API_ENDPOINTS.GOALS.EXERCISE.SAVE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

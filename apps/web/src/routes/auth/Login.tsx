@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { API_ENDPOINTS } from '../../lib/api'
 
 export const Route = createFileRoute('/auth/Login')({
   component: RouteComponent,
@@ -7,7 +8,7 @@ export const Route = createFileRoute('/auth/Login')({
 function RouteComponent() {
   const handleGoogleLogin = () => {
     // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = API_ENDPOINTS.AUTH.GOOGLE;
   };
 
   return (

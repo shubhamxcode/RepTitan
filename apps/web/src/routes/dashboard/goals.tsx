@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Target, TrendingUp, TrendingDown, Heart, CheckCircle2, User, Activity, Flame, Apple, Drumstick, Beef, Wheat, Loader2, Bot, Send, Brain, MessageCircle } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
+import { API_ENDPOINTS } from "@/lib/api";
 
 export const Route = createFileRoute("/dashboard/goals")({
 	component: Goals,
@@ -90,8 +91,7 @@ function Goals() {
 	const [exerciseStats, setExerciseStats] = useState<ExerciseStats | null>(null);
 	const [exerciseStatsLoading, setExerciseStatsLoading] = useState(false);
 
-	// API Base URL
-	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+	// Gemini API Key for chatbot
 	const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 	
 	// For demo purposes, using userId = 1
@@ -264,7 +264,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 		const loadExistingGoal = async () => {
 			setIsLoading(true);
 			try {
-				const response = await fetch(`${API_URL}/goals/${userId}`);
+				const response = await fetch(API_ENDPOINTS.GOALS.GET(userId));
 				if (response.ok) {
 					const data = await response.json();
 					
@@ -317,7 +317,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 
 			setExerciseStatsLoading(true);
 			try {
-				const response = await fetch(`${API_URL}/goals/exercise/${userId}/stats?days=7`);
+				const response = await fetch(API_ENDPOINTS.GOALS.EXERCISE.STATS(userId, 7));
 				if (response.ok) {
 					const data = await response.json();
 					setExerciseStats(data);
@@ -341,7 +341,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 
 		setIsSaving(true);
 		try {
-			const response = await fetch(`${API_URL}/goals/save`, {
+			const response = await fetch(API_ENDPOINTS.GOALS.SAVE, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
