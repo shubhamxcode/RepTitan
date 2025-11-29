@@ -9,15 +9,27 @@ router.get(
 	passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+// Helper to get frontend URL (Vercel URL)
+const getFrontendURL = () => {
+	// Prefer VERCEL_URL if set, fallback to CORS_ORIGIN
+	const url = process.env.VERCEL_URL || process.env.CORS_ORIGIN;
+	if (url) {
+		return url.replace(/\/$/, ""); // Remove trailing slash
+	}
+	// Development fallback
+	return "http://localhost:3001";
+};
+
 // Google OAuth callback
 router.get(
 	"/google/callback",
 	passport.authenticate("google", {
-		failureRedirect: `${process.env.CORS_ORIGIN}/auth/Login`,
+		failureRedirect: `${getFrontendURL()}/auth/Login`,
 	}),
 	(req, res) => {
 		// Successful authentication, redirect to dashboard
-		res.redirect(`${process.env.CORS_ORIGIN}/dashboard`);
+		const frontendURL = getFrontendURL();
+		res.redirect(`${frontendURL}/dashboard`);
 	}
 );
 

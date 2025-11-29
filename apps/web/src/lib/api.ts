@@ -3,8 +3,10 @@
  * Centralized API URL management for connecting to the backend server
  */
 
-// Get API URL from environment variable or use default
-export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+// Get API URL from environment variable (RENDER_URL) or use default
+// Note: In Vite, env vars must start with VITE_ to be exposed
+// So RENDER_URL should be set as VITE_RENDER_URL in Vercel
+export const API_URL = import.meta.env.VITE_RENDER_URL || import.meta.env.RENDER_URL || "http://localhost:3000";
 
 /**
  * Get the full API endpoint URL

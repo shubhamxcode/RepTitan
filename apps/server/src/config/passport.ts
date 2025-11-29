@@ -15,12 +15,27 @@ passport.deserializeUser(async (id: any, done) => {
 	}
 });
 
+// Get the full callback URL for OAuth
+// Use RENDER_URL from environment (set in Render) or fallback to RENDER_EXTERNAL_URL
+const getCallbackURL = () => {
+	// Use RENDER_URL if explicitly set (your custom env var)
+	if (process.env.RENDER_URL) {
+		return `${process.env.RENDER_URL}/auth/google/callback`;
+	}
+	// Render provides RENDER_EXTERNAL_URL automatically
+	if (process.env.RENDER_EXTERNAL_URL) {
+		return `${process.env.RENDER_EXTERNAL_URL}/auth/google/callback`;
+	}
+	// Development fallback
+	return "http://localhost:3000/auth/google/callback";
+};
+
 passport.use(
 	new GoogleStrategy(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID || "",
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-			callbackURL: "/auth/google/callback",
+			callbackURL: getCallbackURL(),
 		},
 		async (_accessToken, _refreshToken, profile, done) => {
 			try {
