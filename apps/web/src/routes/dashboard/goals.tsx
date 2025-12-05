@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Target, TrendingUp, TrendingDown, Heart, CheckCircle2, User, Activity, Flame, Apple, Drumstick, Beef, Wheat, Loader2, Bot, Send, Brain, MessageCircle } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { API_ENDPOINTS } from "@/lib/api";
+import { API_ENDPOINTS, apiGet, apiPost } from "@/lib/api";
 
 export const Route = createFileRoute("/dashboard/goals")({
 	component: Goals,
@@ -264,7 +264,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 		const loadExistingGoal = async () => {
 			setIsLoading(true);
 			try {
-				const response = await fetch(API_ENDPOINTS.GOALS.GET(userId));
+				const response = await apiGet(API_ENDPOINTS.GOALS.GET(userId));
 				if (response.ok) {
 					const data = await response.json();
 					
@@ -317,7 +317,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 
 			setExerciseStatsLoading(true);
 			try {
-				const response = await fetch(API_ENDPOINTS.GOALS.EXERCISE.STATS(userId, 7));
+				const response = await apiGet(API_ENDPOINTS.GOALS.EXERCISE.STATS(userId, 7));
 				if (response.ok) {
 					const data = await response.json();
 					setExerciseStats(data);
@@ -341,34 +341,28 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 
 		setIsSaving(true);
 		try {
-			const response = await fetch(API_ENDPOINTS.GOALS.SAVE, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					userId,
-					goal: selectedGoal,
-					gender: userData.gender,
-					age: parseInt(userData.age),
-					height: parseFloat(userData.height),
-					currentWeight: parseFloat(userData.currentWeight),
-					targetWeight: parseFloat(userData.targetWeight),
-					activityLevel: userData.activityLevel,
-					bmi: nutritionPlan.bmi,
-					bmiCategory: nutritionPlan.bmiCategory,
-					bmr: nutritionPlan.bmr,
-					tdee: nutritionPlan.tdee,
-					targetCalories: nutritionPlan.targetCalories,
-					protein: nutritionPlan.protein,
-					carbs: nutritionPlan.carbs,
-					fats: nutritionPlan.fats,
-					waterIntake: nutritionPlan.waterIntake,
-					weightDifference: nutritionPlan.weightDifference,
-					estimatedWeeks: nutritionPlan.estimatedWeeks,
-					exerciseRecommendation: nutritionPlan.exerciseRecommendation,
-					goalTimeline: nutritionPlan.goalTimeline,
-				}),
+			const response = await apiPost(API_ENDPOINTS.GOALS.SAVE, {
+				userId,
+				goal: selectedGoal,
+				gender: userData.gender,
+				age: parseInt(userData.age),
+				height: parseFloat(userData.height),
+				currentWeight: parseFloat(userData.currentWeight),
+				targetWeight: parseFloat(userData.targetWeight),
+				activityLevel: userData.activityLevel,
+				bmi: nutritionPlan.bmi,
+				bmiCategory: nutritionPlan.bmiCategory,
+				bmr: nutritionPlan.bmr,
+				tdee: nutritionPlan.tdee,
+				targetCalories: nutritionPlan.targetCalories,
+				protein: nutritionPlan.protein,
+				carbs: nutritionPlan.carbs,
+				fats: nutritionPlan.fats,
+				waterIntake: nutritionPlan.waterIntake,
+				weightDifference: nutritionPlan.weightDifference,
+				estimatedWeeks: nutritionPlan.estimatedWeeks,
+				exerciseRecommendation: nutritionPlan.exerciseRecommendation,
+				goalTimeline: nutritionPlan.goalTimeline,
 			});
 
 			const result = await response.json();

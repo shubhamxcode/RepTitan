@@ -8,6 +8,11 @@
 // So RENDER_URL should be set as VITE_RENDER_URL in Vercel
 export const API_URL = import.meta.env.VITE_RENDER_URL || import.meta.env.RENDER_URL || "http://localhost:3000";
 
+// Log API URL for debugging (only in development)
+if (import.meta.env.DEV) {
+  console.log("API URL configured:", API_URL);
+}
+
 /**
  * Get the full API endpoint URL
  * @param endpoint - API endpoint path (e.g., "/auth/user")
@@ -41,4 +46,47 @@ export const API_ENDPOINTS = {
     },
   },
 } as const;
+
+/**
+ * API fetch wrapper with credentials included for cross-origin requests
+ * Always use this for API calls to ensure cookies are sent
+ */
+export async function apiFetch(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const defaultOptions: RequestInit = {
+    credentials: "include", // Always include cookies for cross-origin auth
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  };
+
+  return fetch(url, { ...defaultOptions, ...options });
+}
+
+/**
+ * API GET request helper
+ */
+export async function apiGet(url: string): Promise<Response> {
+  return apiFetch(url, { method: "GET" });
+}
+
+/**
+ * API POST request helper
+ */
+export async function apiPost(url: string, data?: unknown): Promise<Response> {
+  return apiFetch(url, {
+    method: "POST",
+    body: data ? JSON.stringify(data) : undefined,
+  });
+}
+
+/**
+ * API DELETE request helper
+ */
+export async function apiDelete(url: string): Promise<Response> {
+  return apiFetch(url, { method: "DELETE" });
+}
 

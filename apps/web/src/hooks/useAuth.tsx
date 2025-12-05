@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_ENDPOINTS } from '../lib/api';
+import { API_ENDPOINTS, apiGet, apiPost } from '../lib/api';
 
 interface User {
   id: number;
@@ -19,9 +19,7 @@ export const useAuth = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch(API_ENDPOINTS.AUTH.USER, {
-        credentials: 'include', // Important: Include cookies
-      });
+      const response = await apiGet(API_ENDPOINTS.AUTH.USER);
 
       if (response.ok) {
         const userData = await response.json();
@@ -39,10 +37,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      const response = await fetch(API_ENDPOINTS.AUTH.LOGOUT, {
-        method: 'POST',
-        credentials: 'include',
-      });
+      const response = await apiPost(API_ENDPOINTS.AUTH.LOGOUT);
 
       if (response.ok) {
         setUser(null);

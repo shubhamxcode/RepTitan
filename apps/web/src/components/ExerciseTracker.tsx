@@ -10,7 +10,7 @@ import {
 } from '@/lib/exerciseDetection';
 import type { ExerciseType, ExerciseStats } from '@/lib/exerciseDetection';
 import { toast } from 'sonner';
-import { API_ENDPOINTS } from '@/lib/api';
+import { API_ENDPOINTS, apiPost } from '@/lib/api';
 
 interface ExerciseTrackerProps {
   exerciseType: ExerciseType;
@@ -139,18 +139,12 @@ export const ExerciseTracker = ({ exerciseType }: ExerciseTrackerProps) => {
         ? (formQualityHistory.filter((f) => f).length / formQualityHistory.length) * 100
         : 0;
 
-      const response = await fetch(API_ENDPOINTS.GOALS.EXERCISE.SAVE, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          exerciseType,
-          repsCompleted: stats.count,
-          duration: sessionDuration,
-          averageFormQuality: Math.round(averageFormQuality),
-        }),
+      const response = await apiPost(API_ENDPOINTS.GOALS.EXERCISE.SAVE, {
+        userId,
+        exerciseType,
+        repsCompleted: stats.count,
+        duration: sessionDuration,
+        averageFormQuality: Math.round(averageFormQuality),
       });
 
       const result = await response.json();
