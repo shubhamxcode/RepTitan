@@ -7,7 +7,7 @@
  * - rep-titan-web.vercel.app → uses reptitan-cxw5.onrender.com (Render backend)
  */
 
-const PRODUCTION_API_URL = "https://reptitan-cxw5.onrender.com";
+const PRODUCTION_API_URL = "https://reptitan-x7ib.onrender.com";
 const LOCAL_API_URL = "http://localhost:3000";
 
 // Detect if running on localhost or production based on current URL

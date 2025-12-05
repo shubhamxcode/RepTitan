@@ -17,7 +17,7 @@ passport.deserializeUser(async (id: any, done) => {
 
 // Get the full callback URL for OAuth
 // Production URL hardcoded as fallback
-const PRODUCTION_BACKEND = "https://reptitan-cxw5.onrender.com";
+const PRODUCTION_BACKEND = "https://reptitan-x7ib.onrender.com";
 
 const getCallbackURL = () => {
 	// Use RENDER_URL if explicitly set (your custom env var)
