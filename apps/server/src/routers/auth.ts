@@ -5,7 +5,7 @@ const router: ExpressRouter = Router();
 
 // Frontend URLs
 const LOCAL_FRONTEND = "http://localhost:3001";
-const PRODUCTION_FRONTEND = "https://rep-titan-web-shj7.vercel.app";
+const PRODUCTION_FRONTEND = "https://rep-titan-web.vercel.app";
 
 // Google OAuth login - Store the origin before redirecting to Google
 router.get("/google", (req, res, next) => {

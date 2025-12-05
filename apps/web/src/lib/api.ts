@@ -4,7 +4,7 @@
  * 
  * Automatically detects environment:
  * - localhost:3001 → uses localhost:3000 (local backend)
- * - rep-titan-web-shj7.vercel.app → uses reptitan-cxw5.onrender.com (Render backend)
+ * - rep-titan-web.vercel.app → uses reptitan-cxw5.onrender.com (Render backend)
  */
 
 const PRODUCTION_API_URL = "https://reptitan-cxw5.onrender.com";

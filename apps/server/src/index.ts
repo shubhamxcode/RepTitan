@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "production") {
 // CORS configuration - Allow both localhost and production Vercel
 const ALLOWED_ORIGINS = [
 	"http://localhost:3001",           // Local frontend
-	"https://rep-titan-web-shj7.vercel.app",  // Production Vercel
+	"https://rep-titan-web.vercel.app",  // Production Vercel
 ];
 
 // Add any custom origin from env

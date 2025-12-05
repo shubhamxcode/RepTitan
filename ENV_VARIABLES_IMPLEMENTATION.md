@@ -11,8 +11,8 @@ All code has been updated to use your specified environment variables:
 
 ### Backend (Server) - Uses Vercel URL
 - **Variables:** 
-  - `CORS_ORIGIN` = `https://rep-titan-web-shj7.vercel.app`
-  - `VERCEL_URL` = `https://rep-titan-web-shj7.vercel.app` (preferred for redirects)
+  - `CORS_ORIGIN` = `https://rep-titan-web.vercel.app`
+  - `VERCEL_URL` = `https://rep-titan-web.vercel.app` (preferred for redirects)
 - **Used for:** CORS configuration, OAuth redirects after authentication
 
 ### Backend (Server) - Uses Render URL for OAuth Callback
@@ -38,8 +38,8 @@ VITE_RENDER_URL=https://reptitan-cxw5.onrender.com
 
 ```env
 # Vercel Frontend URL (for CORS and redirects)
-CORS_ORIGIN=https://rep-titan-web-shj7.vercel.app
-VERCEL_URL=https://rep-titan-web-shj7.vercel.app
+CORS_ORIGIN=https://rep-titan-web.vercel.app
+VERCEL_URL=https://rep-titan-web.vercel.app
 
 # Render Backend URL (for OAuth callbacks)
 RENDER_URL=https://reptitan-cxw5.onrender.com
@@ -66,7 +66,7 @@ SESSION_SECRET=...
 
 ### Backend (`apps/server/src/routers/auth.ts`):
 - ✅ Redirects use `VERCEL_URL` (preferred) or `CORS_ORIGIN`
-- ✅ Both point to: `https://rep-titan-web-shj7.vercel.app`
+- ✅ Both point to: `https://rep-titan-web.vercel.app`
 
 ### Backend (`apps/server/src/index.ts`):
 - ✅ CORS uses `CORS_ORIGIN` which is your Vercel URL
@@ -82,7 +82,7 @@ SESSION_SECRET=...
 
 2. **Backend receives request:**
    ```
-   Backend (Render) → Checks CORS_ORIGIN → Allows https://rep-titan-web-shj7.vercel.app
+   Backend (Render) → Checks CORS_ORIGIN → Allows https://rep-titan-web.vercel.app
    ```
 
 3. **OAuth callback:**
@@ -92,7 +92,7 @@ SESSION_SECRET=...
 
 4. **After OAuth success:**
    ```
-   Backend → Redirects to VERCEL_URL/dashboard → https://rep-titan-web-shj7.vercel.app/dashboard
+   Backend → Redirects to VERCEL_URL/dashboard → https://rep-titan-web.vercel.app/dashboard
    ```
 
 ---
@@ -106,8 +106,8 @@ SESSION_SECRET=...
 - [ ] Project redeployed after adding variable
 
 ### Render Environment Variables:
-- [ ] `CORS_ORIGIN` = `https://rep-titan-web-shj7.vercel.app`
-- [ ] `VERCEL_URL` = `https://rep-titan-web-shj7.vercel.app`
+- [ ] `CORS_ORIGIN` = `https://rep-titan-web.vercel.app`
+- [ ] `VERCEL_URL` = `https://rep-titan-web.vercel.app`
 - [ ] `RENDER_URL` = `https://reptitan-cxw5.onrender.com`
 - [ ] All other required variables set (DATABASE_URL, PORT, etc.)
 - [ ] Service redeployed after changes
@@ -160,7 +160,7 @@ After setting up environment variables:
 - `VITE_RENDER_URL` → `https://reptitan-cxw5.onrender.com`
 
 **Backend (Render):**
-- `CORS_ORIGIN` → `https://rep-titan-web-shj7.vercel.app`
-- `VERCEL_URL` → `https://rep-titan-web-shj7.vercel.app`
+- `CORS_ORIGIN` → `https://rep-titan-web.vercel.app`
+- `VERCEL_URL` → `https://rep-titan-web.vercel.app`
 - `RENDER_URL` → `https://reptitan-cxw5.onrender.com`
 
