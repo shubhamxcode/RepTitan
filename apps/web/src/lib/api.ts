@@ -1,17 +1,24 @@
 /**
  * API Configuration
  * Centralized API URL management for connecting to the backend server
+ * 
+ * Automatically detects environment:
+ * - localhost:3001 → uses localhost:3000 (local backend)
+ * - rep-titan-web-shj7.vercel.app → uses reptitan-cxw5.onrender.com (Render backend)
  */
 
-// Get API URL from environment variable (RENDER_URL) or use default
-// Note: In Vite, env vars must start with VITE_ to be exposed
-// So RENDER_URL should be set as VITE_RENDER_URL in Vercel
-export const API_URL = import.meta.env.VITE_RENDER_URL || import.meta.env.RENDER_URL || "http://localhost:3000";
+const PRODUCTION_API_URL = "https://reptitan-cxw5.onrender.com";
+const LOCAL_API_URL = "http://localhost:3000";
 
-// Log API URL for debugging (only in development)
-if (import.meta.env.DEV) {
-  console.log("API URL configured:", API_URL);
-}
+// Detect if running on localhost or production based on current URL
+const isLocalhost = typeof window !== "undefined" && 
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
+// Use localhost:3000 for local dev, Render URL for production (Vercel)
+export const API_URL = isLocalhost ? LOCAL_API_URL : PRODUCTION_API_URL;
+
+// Log API URL for debugging
+console.log("🔗 API URL configured:", API_URL, isLocalhost ? "(local)" : "(production)");
 
 /**
  * Get the full API endpoint URL

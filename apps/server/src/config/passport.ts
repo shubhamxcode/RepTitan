@@ -16,7 +16,9 @@ passport.deserializeUser(async (id: any, done) => {
 });
 
 // Get the full callback URL for OAuth
-// Use RENDER_URL from environment (set in Render) or fallback to RENDER_EXTERNAL_URL
+// Production URL hardcoded as fallback
+const PRODUCTION_BACKEND = "https://reptitan-cxw5.onrender.com";
+
 const getCallbackURL = () => {
 	// Use RENDER_URL if explicitly set (your custom env var)
 	if (process.env.RENDER_URL) {
@@ -26,8 +28,9 @@ const getCallbackURL = () => {
 	if (process.env.RENDER_EXTERNAL_URL) {
 		return `${process.env.RENDER_EXTERNAL_URL}/auth/google/callback`;
 	}
-	// Development fallback
-	return "http://localhost:3000/auth/google/callback";
+	// Production fallback or development
+	const baseUrl = process.env.NODE_ENV === "production" ? PRODUCTION_BACKEND : "http://localhost:3000";
+	return `${baseUrl}/auth/google/callback`;
 };
 
 passport.use(

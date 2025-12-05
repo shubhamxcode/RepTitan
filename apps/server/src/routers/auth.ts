@@ -3,35 +3,52 @@ import passport from "../config/passport.js";
 
 const router: ExpressRouter = Router();
 
-// Google OAuth login
-router.get(
-	"/google",
-	passport.authenticate("google", { scope: ["profile", "email"] })
-);
+// Frontend URLs
+const LOCAL_FRONTEND = "http://localhost:3001";
+const PRODUCTION_FRONTEND = "https://rep-titan-web-shj7.vercel.app";
 
-// Helper to get frontend URL (Vercel URL)
-const getFrontendURL = () => {
-	// Prefer VERCEL_URL if set, fallback to CORS_ORIGIN
-	const url = process.env.VERCEL_URL || process.env.CORS_ORIGIN;
-	if (url) {
-		return url.replace(/\/$/, ""); // Remove trailing slash
+// Google OAuth login - Store the origin before redirecting to Google
+router.get("/google", (req, res, next) => {
+	// Get the referer to know where user came from (localhost or vercel)
+	const referer = req.get("Referer") || "";
+	const isFromLocalhost = referer.includes("localhost");
+	
+	// Store the frontend URL in session for redirect after auth
+	(req.session as any).frontendURL = isFromLocalhost ? LOCAL_FRONTEND : PRODUCTION_FRONTEND;
+	
+	console.log("🔐 OAuth started from:", isFromLocalhost ? "localhost" : "production");
+	
+	passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+});
+
+// Helper to get frontend URL from session or fallback
+const getFrontendURL = (req: any) => {
+	// Use stored URL from session, or detect from environment
+	const storedURL = req.session?.frontendURL;
+	if (storedURL) {
+		return storedURL;
 	}
-	// Development fallback
-	return "http://localhost:3001";
+	// Fallback based on NODE_ENV
+	return process.env.NODE_ENV === "production" ? PRODUCTION_FRONTEND : LOCAL_FRONTEND;
 };
 
 // Google OAuth callback
 router.get(
 	"/google/callback",
-	passport.authenticate("google", {
-		failureRedirect: `${getFrontendURL()}/auth/Login`,
-	}),
+	passport.authenticate("google", { failureRedirect: "/auth/login-failed" }),
 	(req, res) => {
-		// Successful authentication, redirect to dashboard
-		const frontendURL = getFrontendURL();
+		// Successful authentication, redirect to the frontend user came from
+		const frontendURL = getFrontendURL(req);
+		console.log("✅ OAuth success, redirecting to:", frontendURL);
 		res.redirect(`${frontendURL}/dashboard`);
 	}
 );
+
+// Handle login failure
+router.get("/login-failed", (req, res) => {
+	const frontendURL = getFrontendURL(req);
+	res.redirect(`${frontendURL}/auth/Login?error=auth_failed`);
+});
 
 // Logout
 router.post("/logout", (req, res) => {
