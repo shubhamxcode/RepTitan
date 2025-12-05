@@ -15,9 +15,14 @@ dotenv.config({ path: path.resolve(__dirname, "../.env.local") }); // Load .env.
 dotenv.config({ path: path.resolve(__dirname, "../.env") }); // Then load .env (won't override existing vars)
 
 const app = express();
+const isProduction = process.env.NODE_ENV === "production";
+
+console.log("Server starting...");
+console.log("Environment:", process.env.NODE_ENV);
+console.log("Production Mode:", isProduction);
 
 // Trust proxy for secure cookies behind Render's proxy
-if (process.env.NODE_ENV === "production") {
+if (isProduction) {
 	app.set("trust proxy", 1);
 }
 
@@ -61,11 +66,13 @@ app.use(
 		secret: process.env.SESSION_SECRET || "your-secret-key",
 		resave: false,
 		saveUninitialized: false,
+		proxy: isProduction, // Required for Heroku/Render/Vercel proxies
 		cookie: {
-			secure: process.env.NODE_ENV === "production", // HTTPS only in production
+			secure: isProduction, // HTTPS only in production
 			httpOnly: true,
 			maxAge: 24 * 60 * 60 * 1000, // 24 hours
-			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-domain
+			sameSite: isProduction ? "none" : "lax", // Required for cross-domain
+			domain: isProduction ? undefined : undefined, // Let the browser handle domain (defaults to host)
 		},
 	})
 );

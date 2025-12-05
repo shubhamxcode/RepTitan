@@ -1,11 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Navigate } from '@tanstack/react-router'
 import { API_ENDPOINTS } from '../../lib/api'
+import { useAuth } from '../../hooks/useAuth'
 
 export const Route = createFileRoute('/auth/Login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { isAuthenticated, loading } = useAuth();
+
+  // If already authenticated, redirect to dashboard
+  if (!loading && isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
   const handleGoogleLogin = () => {
     // Redirect to backend Google OAuth endpoint
     window.location.href = API_ENDPOINTS.AUTH.GOOGLE;
