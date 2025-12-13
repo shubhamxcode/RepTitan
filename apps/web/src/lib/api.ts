@@ -50,6 +50,8 @@ export const API_ENDPOINTS = {
       SAVE: getApiUrl("/goals/exercise/save"),
       STATS: (userId: number, days: number = 7) => 
         getApiUrl(`/goals/exercise/${userId}/stats?days=${days}`),
+      GET_SESSIONS: (userId: number, limit: number = 5) => 
+        getApiUrl(`/goals/exercise/${userId}?limit=${limit}`),
     },
   },
 } as const;

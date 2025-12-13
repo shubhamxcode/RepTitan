@@ -1,156 +1,160 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, Heart, Target, TrendingUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { API_ENDPOINTS, apiFetch } from "@/lib/api";
+import { ActivitySummaryCard } from "@/components/Dashboard/Overview/ActivitySummaryCard";
+import { HealthMetricCard } from "@/components/Dashboard/Overview/HealthMetricCard";
+import { MainProgressChart } from "@/components/Dashboard/Overview/MainProgressChart";
+import { RecentActivityItem } from "@/components/Dashboard/Overview/RecentActivityItem";
+import { Activity, Droplets, Scale } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/")({
-	component: DashboardHome,
+  component: DashboardHome,
 });
 
+interface ExerciseSession {
+  id: number;
+  exerciseType: string;
+  duration: number;
+  caloriesBurned: number;
+  sessionDate: string;
+}
+
 function DashboardHome() {
-	const { user } = useAuth();
+  const { user } = useAuth();
 
-	const stats = [
-		{
-			title: "Posture Sessions",
-			value: "12",
-			change: "+3 this week",
-			icon: Activity,
-			color: "text-blue-600 dark:text-blue-400",
-		},
-		{
-			title: "Health Score",
-			value: "85%",
-			change: "+5% from last week",
-			icon: Heart,
-			color: "text-red-600 dark:text-red-400",
-		},
-		{
-			title: "Goals Completed",
-			value: "7/10",
-			change: "3 remaining",
-			icon: Target,
-			color: "text-green-600 dark:text-green-400",
-		},
-		{
-			title: "Weekly Progress",
-			value: "68%",
-			change: "+12% improvement",
-			icon: TrendingUp,
-			color: "text-purple-600 dark:text-purple-400",
-		},
-	];
+  // Fetch Goals/Health Data
+  const { data: goalData } = useQuery({
+    queryKey: ["goals", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await apiFetch(API_ENDPOINTS.GOALS.GET(user.id));
+      if (!res.ok) throw new Error("Failed to fetch goals");
+      return res.json();
+    },
+    enabled: !!user?.id,
+  });
 
-	return (
-		<div className="space-y-8">
-			{/* Welcome Section */}
-			<div>
-				<h1 className="text-3xl font-bold text-foreground">
-					Welcome back, {user?.name?.split(" ")[0]}!
-				</h1>
-				<p className="text-muted-foreground mt-2">
-					Here's your health and fitness overview
-				</p>
-			</div>
+  // Fetch Exercise Stats
+  const { data: exerciseStats } = useQuery({
+    queryKey: ["exerciseStats", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await apiFetch(API_ENDPOINTS.GOALS.EXERCISE.STATS(user.id, 30));
+      if (!res.ok) throw new Error("Failed to fetch stats");
+      return res.json();
+    },
+    enabled: !!user?.id,
+  });
 
-			{/* Stats Grid */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-				{stats.map((stat) => {
-					const Icon = stat.icon;
-					return (
-						<Card key={stat.title}>
-							<CardContent className="pt-6">
-								<div className="flex items-start justify-between">
-									<div className="space-y-2">
-										<p className="text-sm font-medium text-muted-foreground">
-											{stat.title}
-										</p>
-										<p className="text-2xl font-bold text-foreground">{stat.value}</p>
-										<p className="text-xs text-muted-foreground">{stat.change}</p>
-									</div>
-									<div className={`p-2 rounded-lg bg-muted ${stat.color}`}>
-										<Icon className="size-5" />
-									</div>
-								</div>
-							</CardContent>
-						</Card>
-					);
-				})}
-			</div>
+  // Fetch Recent Sessions
+  const { data: recentSessions } = useQuery({
+    queryKey: ["recentSessions", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await apiFetch(API_ENDPOINTS.GOALS.EXERCISE.GET_SESSIONS(user.id, 5));
+      if (!res.ok) throw new Error("Failed to fetch recent sessions");
+      return res.json();
+    },
+    enabled: !!user?.id,
+  });
 
-			{/* Recent Activity Section */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				<Card>
-					<CardHeader>
-						<CardTitle>Recent Activity</CardTitle>
-						<CardDescription>Your latest posture and health sessions</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-4">
-							{[
-								{ activity: "Posture Training", time: "2 hours ago", duration: "15 min" },
-								{ activity: "Health Check", time: "Yesterday", duration: "5 min" },
-								{ activity: "Goal Review", time: "2 days ago", duration: "10 min" },
-							].map((item, idx) => (
-								<div
-									key={idx}
-									className="flex items-center justify-between py-3 border-b border-border last:border-0"
-								>
-									<div>
-										<p className="text-sm font-medium text-foreground">
-											{item.activity}
-										</p>
-										<p className="text-xs text-muted-foreground">{item.time}</p>
-									</div>
-									<span className="text-xs text-muted-foreground">
-										{item.duration}
-									</span>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
+  // Mock data for charts if API returns empty or simple data
+  // Ideally this would be transformed from real data
+  const weeklyData = [
+    { day: "Mon", calories: 320 },
+    { day: "Tue", calories: 450 },
+    { day: "Wed", calories: 280 },
+    { day: "Thu", calories: 500 },
+    { day: "Fri", calories: 380 },
+    { day: "Sat", calories: 600 },
+    { day: "Sun", calories: 420 },
+  ];
 
-				<Card>
-					<CardHeader>
-						<CardTitle>Quick Actions</CardTitle>
-						<CardDescription>Get started with your daily routine</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="grid grid-cols-2 gap-3">
-							<button className="p-4 rounded-lg border border-border hover:bg-accent transition-colors text-left">
-								<Activity className="size-5 mb-2 text-blue-600 dark:text-blue-400" />
-								<p className="text-sm font-medium">Start Posture</p>
-							</button>
-							<button className="p-4 rounded-lg border border-border hover:bg-accent transition-colors text-left">
-								<Heart className="size-5 mb-2 text-red-600 dark:text-red-400" />
-								<p className="text-sm font-medium">Health Check</p>
-							</button>
-							<button className="p-4 rounded-lg border border-border hover:bg-accent transition-colors text-left">
-								<Target className="size-5 mb-2 text-green-600 dark:text-green-400" />
-								<p className="text-sm font-medium">Set Goal</p>
-							</button>
-							<button className="p-4 rounded-lg border border-border hover:bg-accent transition-colors text-left">
-								<TrendingUp className="size-5 mb-2 text-purple-600 dark:text-purple-400" />
-								<p className="text-sm font-medium">View Progress</p>
-							</button>
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+  const progressData = [
+    { date: "Jan", value: 400, value2: 240 },
+    { date: "Feb", value: 300, value2: 139 },
+    { date: "Mar", value: 550, value2: 380 },
+    { date: "Apr", value: 480, value2: 390 },
+    { date: "May", value: 650, value2: 480 },
+    { date: "Jun", value: 700, value2: 520 },
+    { date: "Jul", value: 800, value2: 600 },
+  ];
 
-			{/* Tips Section */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Daily Tip</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<p className="text-sm text-muted-foreground">
-						Remember to take regular breaks every 30 minutes to maintain good posture
-						and avoid strain. Stand up, stretch, and walk around for a few minutes.
-					</p>
-				</CardContent>
-			</Card>
-		</div>
-	);
+  return (
+    <div className="space-y-8 pb-8">
+      {/* Welcome Section */}
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Welcome back, {user?.name?.split(" ")[0] || "User"}!
+        </h1>
+        <p className="text-muted-foreground">
+          Here is your daily activity summary and health overview.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Stats Card (Portfolio Value equivalent) */}
+        <ActivitySummaryCard
+          totalCalories={exerciseStats?.totalCalories || 0}
+          totalDuration={exerciseStats?.totalDuration || 0}
+          totalSessions={exerciseStats?.totalSessions || 0}
+          weeklyData={weeklyData}
+        />
+
+        {/* Small Metric Cards (Crypto equivalent) */}
+        <div className="space-y-6">
+          <HealthMetricCard
+            title="Current Weight"
+            value={goalData?.currentWeight ? `${goalData.currentWeight} kg` : "N/A"}
+            trend="1.2%"
+            trendUp={false} // Weight down is usually good
+            icon={Scale}
+            iconColor="text-blue-500"
+          />
+          <HealthMetricCard
+            title="BMI Score"
+            value={goalData?.bmi ? goalData.bmi.toFixed(1) : "N/A"}
+            trend="Healthy"
+            trendUp={true}
+            icon={Activity}
+            iconColor="text-green-500"
+          />
+          <HealthMetricCard
+            title="Water Intake"
+            value={goalData?.waterIntake ? `${goalData.waterIntake} ml` : "2500 ml"}
+            trend="Target"
+            trendUp={true}
+            icon={Droplets}
+            iconColor="text-cyan-500"
+          />
+        </div>
+      </div>
+
+      {/* Main Chart Section */}
+      <MainProgressChart data={progressData} />
+
+      {/* Recent Activity Section (Timeline equivalent) */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold tracking-tight">Recent Sessions</h2>
+        <div className="bg-card rounded-xl border border-border shadow-sm">
+          {recentSessions && recentSessions.length > 0 ? (
+            recentSessions.map((session: ExerciseSession) => (
+              <RecentActivityItem
+                key={session.id}
+                activity={session.exerciseType}
+                time={new Date(session.sessionDate).toLocaleDateString()}
+                duration={`${Math.round(session.duration / 60)} min`}
+                calories={session.caloriesBurned}
+              />
+            ))
+          ) : (
+            <div className="p-8 text-center text-muted-foreground">
+              No recent activity found. Start a workout!
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
