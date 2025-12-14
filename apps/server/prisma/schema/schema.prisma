@@ -59,9 +59,9 @@ model ExerciseSession{
   
   // Exercise Details
   exerciseType String // "pushup", "squat", "plank"
-  repsCompleted Int @default(0) // Number of reps for pushup/squat, 0 for plank
+  repsCompleted Int @default(0)
   duration Int // Duration in seconds
-  caloriesBurned Int @default(0) // Estimated calories burned
+  caloriesBurned Int @default(0)
   averageFormQuality Float @default(0) // Average form quality percentage (0-100)
   
   // Session Metadata

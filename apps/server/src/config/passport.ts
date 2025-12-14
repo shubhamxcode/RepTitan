@@ -24,10 +24,6 @@ const getCallbackURL = () => {
 	if (process.env.RENDER_URL) {
 		return `${process.env.RENDER_URL}/auth/google/callback`;
 	}
-	// Render provides RENDER_EXTERNAL_URL automatically
-	if (process.env.RENDER_EXTERNAL_URL) {
-		return `${process.env.RENDER_EXTERNAL_URL}/auth/google/callback`;
-	}
 	// Production fallback or development
 	const baseUrl = process.env.NODE_ENV === "production" ? PRODUCTION_BACKEND : "http://localhost:3000";
 	return `${baseUrl}/auth/google/callback`;
@@ -52,7 +48,7 @@ passport.use(
 					user = await prisma.user.findUnique({
 						where: { email: profile.emails?.[0]?.value },
 					});
-
+					
 					if (user) {
 						// Link Google account to existing user
 						user = await prisma.user.update({

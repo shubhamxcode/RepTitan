@@ -10,8 +10,7 @@ import goalsRouter from "./routers/goals.js";
 
 // Load environment variables
 // .env.local takes precedence over .env for local development
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "../.env.local") }); // Load .env.local first (if exists)
+const __dirname = path.dirname(fileURLToPath(import.meta.url)); // Load .env.local first (if exists)
 dotenv.config({ path: path.resolve(__dirname, "../.env") }); // Then load .env (won't override existing vars)
 
 const app = express();
@@ -28,16 +27,9 @@ if (isProduction) {
 
 // CORS configuration - Allow both localhost and production Vercel
 const ALLOWED_ORIGINS = [
-	"http://localhost:3001",           // Local frontend
-	"https://rep-titan-web.vercel.app",  // Production Vercel
+	"http://localhost:3001",          
+	"https://rep-titan-web.vercel.app",
 ];
-
-// Add any custom origin from env
-if (process.env.CORS_ORIGIN && !ALLOWED_ORIGINS.includes(process.env.CORS_ORIGIN)) {
-	ALLOWED_ORIGINS.push(process.env.CORS_ORIGIN);
-}
-
-console.log("✅ CORS Origins allowed:", ALLOWED_ORIGINS);
 
 app.use(
 	cors({

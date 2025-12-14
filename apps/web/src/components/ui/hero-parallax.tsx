@@ -57,7 +57,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d] bg-white dark:bg-black"
+      className="h-[300vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d] bg-black"
     >
       <Header />
       <motion.div
@@ -104,16 +104,18 @@ export const HeroParallax = ({
 export const Header = () => {
   return (
     <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full left-0 top-0">
-      <h2 className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 tracking-widest mb-4">
-        FEATURES
+      <h2 className="text-sm font-bold text-red-600 tracking-[0.5em] mb-4 font-mono">
+        &gt; FEATURES
       </h2>
-      <h1 className="text-4xl md:text-7xl font-bold text-gray-900 dark:text-white mb-8">
-        AI-Powered Fitness <br /> at Your Fingertips
+      <h1 className="text-4xl md:text-7xl font-bold text-white mb-8">
+        AI-Powered Arsenal <br /> For The Revolution
       </h1>
-      <p className="max-w-2xl text-base md:text-xl text-gray-600 dark:text-gray-400">
-        Experience the future of fitness with intelligent rep counting, real-time form analysis, 
-        and personalized insights. RepTitan combines cutting-edge AI technology with your workout 
-        routine to help you achieve peak performance.
+      <p className="max-w-2xl text-base md:text-xl text-gray-400 font-mono">
+        <span className="text-red-500 font-bold">&gt;</span> Initialize intelligent rep counting...
+        <br />
+        <span className="text-red-500 font-bold">&gt;</span> Real-time form analysis active...
+        <br />
+        <span className="text-red-500 font-bold">&gt;</span> Personalized insights loading...
       </p>
     </div>
   );
@@ -143,18 +145,18 @@ export const ProductCard = ({
     >
       <a
         href={product.link}
-        className="block group-hover/product:shadow-2xl "
+        className="block group-hover/product:shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-shadow duration-500"
       >
         <img
           src={product.thumbnail}
           height="600"
           width="600"
-          className="object-cover object-left-top absolute h-full w-full inset-0 rounded-xl border border-gray-300 dark:border-gray-800"
+          className="object-cover object-left-top absolute h-full w-full inset-0 rounded-none border-2 border-red-900/40 group-hover/product:border-red-600 transition-colors"
           alt={product.title}
         />
       </a>
-      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none rounded-xl"></div>
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white font-semibold z-10">
+      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-90 bg-black/80 pointer-events-none transition-opacity duration-300"></div>
+      <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover/product:opacity-100 text-red-500 font-mono text-xl font-bold z-10 tracking-widest text-center border-2 border-red-600 px-6 py-2 uppercase">
         {product.title}
       </h2>
     </motion.div>

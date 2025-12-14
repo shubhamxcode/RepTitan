@@ -1,23 +1,21 @@
 import { Router, type Router as ExpressRouter } from "express";
 import passport from "../config/passport.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 const router: ExpressRouter = Router();
 
-// Frontend URLs
-const LOCAL_FRONTEND = "http://localhost:3001";
-const PRODUCTION_FRONTEND = "https://rep-titan-web.vercel.app";
+const LOCAL_FRONTEND = process.env.LocalHostUrl;
+const PRODUCTION_FRONTEND = process.env.VERCEL_URL;
 
-// Google OAuth login - Store the origin before redirecting to Google
+
 router.get("/google", (req, res, next) => {
-	// Get the referer to know where user came from (localhost or vercel)
 	const referer = req.get("Referer") || "";
 	const isFromLocalhost = referer.includes("localhost");
 	
-	// Store the frontend URL in session for redirect after auth
 	(req.session as any).frontendURL = isFromLocalhost ? LOCAL_FRONTEND : PRODUCTION_FRONTEND;
 	
-	console.log("🔐 OAuth started from:", isFromLocalhost ? "localhost" : "production");
-	
+	console.log("OAuth started from:", isFromLocalhost ? "localhost" : "production");
 	passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
 });
 
@@ -32,14 +30,14 @@ const getFrontendURL = (req: any) => {
 	return process.env.NODE_ENV === "production" ? PRODUCTION_FRONTEND : LOCAL_FRONTEND;
 };
 
-// Google OAuth callback
+
 router.get(
 	"/google/callback",
 	passport.authenticate("google", { failureRedirect: "/auth/login-failed" }),
 	(req, res) => {
 		// Successful authentication, redirect to the frontend user came from
 		const frontendURL = getFrontendURL(req);
-		console.log("✅ OAuth success, redirecting to:", frontendURL);
+		console.log("OAuth success, redirecting to:", frontendURL);
 		res.redirect(`${frontendURL}/dashboard`);
 	}
 );

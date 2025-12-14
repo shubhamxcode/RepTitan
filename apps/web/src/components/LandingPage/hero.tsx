@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
-import Intro from "/images/intro.png";
+import { GlitchEffect } from "@/components/GlitchEffect";
 
 export default function Hero() {
 	const [scrollY, setScrollY] = useState(0);
@@ -16,48 +16,59 @@ export default function Hero() {
 	}, []);
 
 	return (
-		<div className="relative min-h-screen overflow-hidden bg-white dark:bg-black">
-			{/* Background Image with Parallax */}
-			<div 
-				className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-100 ease-out"
+		<div className="relative min-h-screen overflow-hidden bg-black text-white font-mono selection:bg-red-500 selection:text-white">
+			{/* Background Video (Local) */}
+			<div
+				className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
 				style={{
-					backgroundImage: `url(${Intro})`,
 					transform: `translateY(${scrollY * 0.5}px) scale(1.1)`,
 				}}
-			></div>
-			
+			>
+				<video
+					className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
+					src="/video/dark_intro.mp4"
+					autoPlay
+					muted
+					loop
+					playsInline
+				/>
+			</div>
+
 			{/* Gradient Overlay Layers */}
-			<div className="absolute inset-0 bg-gradient-to-br from-indigo-200/30 via-purple-200/20 to-white/40 dark:from-indigo-900/60 dark:via-purple-900/50 dark:to-black/70 z-10"></div>
-			<div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent dark:from-black dark:via-transparent dark:to-transparent z-10"></div>
-			
-			{/* Animated Shapes/Elements */}
-			<div 
-				className="absolute top-20 right-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+			<div className="absolute inset-0 bg-gradient-to-br from-red-950/30 via-black/60 to-black z-10"></div>
+			<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000000_100%)] z-10 opacity-70"></div>
+			<div className="absolute inset-0 z-10 opacity-20 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(255,0,0,0.02),rgba(255,0,0,0.06))] bg-[length:100%_4px,6px_100%]"></div>
+
+
+			{/* Animated Shapes/Elements - Red/Dark */}
+			<div
+				className="absolute top-20 right-10 w-72 h-72 bg-red-600/10 rounded-full blur-[100px]"
 				style={{
 					transform: `translateY(${scrollY * 0.3}px)`,
 				}}
 			></div>
-			<div 
-				className="absolute bottom-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+			<div
+				className="absolute bottom-20 left-10 w-96 h-96 bg-red-900/10 rounded-full blur-[120px]"
 				style={{
 					transform: `translateY(${scrollY * -0.2}px)`,
 				}}
 			></div>
-			
+
 			{/* Main Content with Parallax Layers */}
 			<div className="relative z-20 flex flex-col justify-center min-h-screen px-8 md:px-16 lg:px-24">
 				{/* Speed Label - Subtle detail */}
-				<div 
-					className="mb-4 opacity-60 text-sm tracking-[0.3em] text-cyan-600 dark:text-cyan-400 font-light"
+				<div
+					className="mb-4 opacity-80 text-sm tracking-[0.3em] text-red-500 font-mono flex items-center gap-2"
 					style={{
 						transform: `translateY(${scrollY * 0.8}px)`,
 					}}
 				>
-					01. AI-POWERED FITNESS
+					<span className="w-2 h-2 bg-red-500 animate-pulse rounded-full"></span>
+					&gt; SYSTEM_READY
 				</div>
-				
+
 				{/* Main Heading with Different Speed */}
-				<div 
+				<div
 					className="mb-8 max-w-5xl"
 					style={{
 						transform: `translateY(${scrollY * 0.4}px)`,
@@ -65,103 +76,96 @@ export default function Hero() {
 					}}
 				>
 					<div className="flex flex-wrap items-center gap-3 mb-4">
-						<LayoutTextFlip 
-							text="RepTitan"
-							words={[
-								"combines AI with fitness",
-								"transforms your workouts",
-								"makes you stronger",
-								"is your fitness companion"
-							]}
-							duration={2000}
-						/>
+						<GlitchEffect text="RepTitan" className="text-7xl md:text-9xl font-black text-red-600 mb-2 tracking-tighter" />
+						<div className="text-3xl md:text-5xl text-white font-bold bg-red-600/10 px-4 py-1 border-l-4 border-red-600">
+							<LayoutTextFlip
+								text=""
+								words={[
+									"KILL THE ASUR...",
+									"REWRITE DESTINY...",
+									"START DOING NOW...",
+									"THE END IS NEAR..."
+								]}
+								duration={2000}
+							/>
+						</div>
 					</div>
 				</div>
-				
+
 				{/* Subtitle with different parallax speed */}
-				<p 
-					className="text-xl md:text-2xl text-gray-700 dark:text-white/80 leading-relaxed font-light mb-12 max-w-2xl"
+				<p
+					className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light mb-12 max-w-2xl border-l-[1px] border-red-900/50 pl-6"
 					style={{
 						transform: `translateY(${scrollY * 0.2}px)`,
 						opacity: 1 - scrollY * 0.004,
 					}}
 				>
-					RepTitan combines AI with fitness to transform your workouts. 
-					<span className="text-cyan-600 dark:text-cyan-400 font-medium"> Smarter reps, stronger you.</span>
+					There are two worlds. The one you see, and the truth you deny.
+					<span className="text-red-500 font-bold block mt-2"> Kill the Asur in your head.</span>
 				</p>
-				
+
 				{/* CTA Button with minimal parallax */}
-				<div 
+				<div
 					className="flex items-center gap-6"
 					style={{
 						transform: `translateY(${scrollY * 0.15}px)`,
 						opacity: 1 - scrollY * 0.005,
 					}}
 				>
-					<Button 
+					<Button
 						size="lg"
-						className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-10 py-7 text-lg rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] inline-flex items-center gap-3 group"
+						className="bg-red-600 hover:bg-black hover:text-red-500 text-white font-mono font-bold px-10 py-8 text-lg rounded-none transition-all duration-300 shadow-[0_0_30px_rgba(220,38,38,0.2)] hover:shadow-[0_0_20px_rgba(220,38,38,0.6)] hover:border-red-600 border border-transparent inline-flex items-center gap-3 group relative overflow-hidden"
 					>
-						Watch Video
-						<svg 
-							className="w-5 h-5 transition-transform group-hover:translate-x-1" 
-							fill="currentColor" 
-							viewBox="0 0 20 20"
-						>
-							<path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
-						</svg>
+						<span className="relative z-10 flex items-center gap-2">
+							Get Started
+							<svg
+								className="w-5 h-5 transition-transform group-hover:translate-x-1"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+							>
+								<path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+							</svg>
+						</span>
 					</Button>
-					
-					<div className="text-gray-600 dark:text-white/60 text-sm">
+
+					<div className="text-gray-500 text-sm font-mono">
 						<div className="flex items-center gap-2">
-							<div className="w-12 h-[1px] bg-gray-400 dark:bg-white/40"></div>
-							<span className="tracking-wider">SCROLL TO EXPLORE</span>
+							<div className="w-12 h-[1px] bg-red-900"></div>
+							<span className="tracking-widest opacity-60">SCROLL TO EXPLORE</span>
 						</div>
 					</div>
 				</div>
-				
+
 				{/* Stats/Metrics - Fixed position effect */}
-				<div 
-					className="absolute bottom-16 right-8 md:right-24"
+				<div
+					className="absolute bottom-16 right-8 md:right-24 hidden md:block"
 					style={{
 						transform: `translateY(${scrollY * -0.1}px)`,
 						opacity: 1 - scrollY * 0.006,
 					}}
 				>
-					<div className="backdrop-blur-md bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-right shadow-lg">
-						<div className="text-5xl md:text-6xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">
-							92.0<span className="text-3xl">%</span>
+					<div className="backdrop-blur-sm bg-black/40 border border-red-900/30 rounded-none p-6 text-right shadow-[0_0_15px_rgba(220,38,38,0.1)]">
+						<div className="text-5xl md:text-6xl font-bold text-red-600 mb-1 font-mono">
+							99.9<span className="text-3xl">%</span>
 						</div>
-						<div className="text-xs text-gray-600 dark:text-white/60 tracking-widest font-medium">
-							PERFECT EXECUTION
+						<div className="text-xs text-red-400/60 tracking-[0.2em] font-medium uppercase">
+							Accuracy
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			{/* Scroll Indicator - Animated */}
-			<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 animate-bounce">
-				<div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-cyan-600 dark:via-cyan-400 to-transparent"></div>
-				<svg 
-					className="w-6 h-6 text-cyan-600 dark:text-cyan-400" 
-					fill="none" 
-					stroke="currentColor" 
+			<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 animate-pulse opacity-50">
+				<div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-red-600 to-transparent"></div>
+				<svg
+					className="w-6 h-6 text-red-600"
+					fill="none"
+					stroke="currentColor"
 					viewBox="0 0 24 24"
 				>
 					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
 				</svg>
-			</div>
-			
-			{/* Large Typography Background - Fixed */}
-			<div 
-				className="absolute top-1/2 left-0 -translate-y-1/2 z-0 select-none pointer-events-none opacity-5"
-				style={{
-					transform: `translateY(-50%) translateX(${scrollY * -0.05}px)`,
-				}}
-			>
-				<h2 className="text-[20rem] font-black text-gray-900 dark:text-white whitespace-nowrap">
-					FITNESS
-				</h2>
 			</div>
 		</div>
 	);
