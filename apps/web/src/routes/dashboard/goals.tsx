@@ -92,8 +92,8 @@ function Goals() {
 	const [exerciseStatsLoading, setExerciseStatsLoading] = useState(false);
 
 	// Gemini API Key for chatbot
-	const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-	
+	const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
+
 	// For demo purposes, using userId = 1
 	// In production, get this from auth context/session
 	const userId = 1;
@@ -142,7 +142,7 @@ function Goals() {
 	// Send chat message to Gemini AI
 	const sendChatMessage = async (messageText?: string) => {
 		const textToSend = messageText || chatInput.trim();
-		
+
 		if (!textToSend || isChatLoading) return;
 
 		const userMessage: ChatMessage = {
@@ -230,11 +230,11 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 			}
 
 			const data = await response.json();
-			
+
 			// Safe fallback handling for response structure
-			const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 
-						 data?.candidates?.[0]?.output || 
-						 "Sorry, I couldn't generate a response. Please try again.";
+			const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+				data?.candidates?.[0]?.output ||
+				"Sorry, I couldn't generate a response. Please try again.";
 
 			const assistantMessage: ChatMessage = {
 				id: (Date.now() + 1).toString(),
@@ -267,7 +267,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 				const response = await apiGet(API_ENDPOINTS.GOALS.GET(userId));
 				if (response.ok) {
 					const data = await response.json();
-					
+
 					// Populate form with existing data
 					setSelectedGoal(data.goal as GoalType);
 					setUserData({
@@ -408,7 +408,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 		// Calculate BMI (current)
 		const heightInMeters = height / 100;
 		const bmi = currentWeight / (heightInMeters * heightInMeters);
-		
+
 		let bmiCategory = "";
 		if (bmi < 18.5) bmiCategory = "Underweight";
 		else if (bmi < 25) bmiCategory = "Normal weight";
@@ -484,11 +484,11 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 		// Calculate macros (based on current weight)
 		const protein = currentWeight * proteinPerKg; // grams
 		const proteinCalories = protein * 4;
-		
+
 		// Fats should be 25-30% of total calories
 		const fatCalories = targetCalories * 0.27;
 		const fats = fatCalories / 9; // grams
-		
+
 		// Remaining calories from carbs
 		const carbCalories = targetCalories - proteinCalories - fatCalories;
 		const carbs = carbCalories / 4; // grams
@@ -543,19 +543,17 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 					{[1, 2, 3].map((s) => (
 						<div key={s} className="flex items-center">
 							<div
-								className={`size-10 rounded-full flex items-center justify-center font-semibold transition-all ${
-									step >= s
-										? "bg-blue-600 text-white"
-										: "bg-muted text-muted-foreground"
-								}`}
+								className={`size-10 rounded-full flex items-center justify-center font-semibold transition-all ${step >= s
+									? "bg-blue-600 text-white"
+									: "bg-muted text-muted-foreground"
+									}`}
 							>
 								{s}
 							</div>
 							{s < 3 && (
 								<div
-									className={`h-1 w-16 mx-2 transition-all ${
-										step > s ? "bg-blue-600" : "bg-muted"
-									}`}
+									className={`h-1 w-16 mx-2 transition-all ${step > s ? "bg-blue-600" : "bg-muted"
+										}`}
 								/>
 							)}
 						</div>
@@ -587,15 +585,14 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 						{goalOptions.map((goal) => {
 							const Icon = goal.icon;
 							const isSelected = selectedGoal === goal.id;
-							
+
 							return (
-								<Card 
+								<Card
 									key={goal.id}
-									className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
-										isSelected 
-											? `${goal.borderColor} border-2 ring-2 ring-offset-2 ring-${goal.color}-500/50` 
-											: "border-muted hover:border-muted-foreground/30"
-									}`}
+									className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${isSelected
+										? `${goal.borderColor} border-2 ring-2 ring-offset-2 ring-${goal.color}-500/50`
+										: "border-muted hover:border-muted-foreground/30"
+										}`}
 									onClick={() => handleSelectGoal(goal.id as GoalType)}
 								>
 									<CardContent className="pt-6 pb-6">
@@ -618,7 +615,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 													</p>
 												</div>
 											</div>
-											<Button 
+											<Button
 												className="w-full"
 												variant={isSelected ? "default" : "outline"}
 												onClick={(e) => {
@@ -748,13 +745,12 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 										<p className="text-sm text-muted-foreground">
 											Weight Difference:
 										</p>
-										<p className={`text-lg font-bold ${
-											parseFloat(userData.targetWeight) > parseFloat(userData.currentWeight)
-												? "text-blue-600 dark:text-blue-400"
-												: parseFloat(userData.targetWeight) < parseFloat(userData.currentWeight)
+										<p className={`text-lg font-bold ${parseFloat(userData.targetWeight) > parseFloat(userData.currentWeight)
+											? "text-blue-600 dark:text-blue-400"
+											: parseFloat(userData.targetWeight) < parseFloat(userData.currentWeight)
 												? "text-green-600 dark:text-green-400"
 												: "text-purple-600 dark:text-purple-400"
-										}`}>
+											}`}>
 											{parseFloat(userData.targetWeight) > parseFloat(userData.currentWeight) && "+"}
 											{Math.round((parseFloat(userData.targetWeight) - parseFloat(userData.currentWeight)) * 10) / 10} kg
 										</p>
@@ -769,11 +765,10 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 									{activityLevels.map((level) => (
 										<Card
 											key={level.value}
-											className={`cursor-pointer transition-all ${
-												userData.activityLevel === level.value
-													? "border-blue-600 border-2 bg-blue-50 dark:bg-blue-950/20"
-													: "hover:border-muted-foreground/30"
-											}`}
+											className={`cursor-pointer transition-all ${userData.activityLevel === level.value
+												? "border-blue-600 border-2 bg-blue-50 dark:bg-blue-950/20"
+												: "hover:border-muted-foreground/30"
+												}`}
 											onClick={() =>
 												setUserData({
 													...userData,
@@ -782,8 +777,8 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 											}
 										>
 											<CardContent className="p-4">
-						<div className="flex items-center justify-between">
-							<div>
+												<div className="flex items-center justify-between">
+													<div>
 														<p className="font-semibold text-foreground">{level.label}</p>
 														<p className="text-sm text-muted-foreground">
 															{level.description}
@@ -834,13 +829,12 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 					</div>
 
 					{/* Weight Progress Card */}
-					<Card className={`max-w-6xl mx-auto ${
-						selectedGoal === "weight_loss"
-							? "border-green-200 dark:border-green-900 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
-							: selectedGoal === "weight_gain"
+					<Card className={`max-w-6xl mx-auto ${selectedGoal === "weight_loss"
+						? "border-green-200 dark:border-green-900 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
+						: selectedGoal === "weight_gain"
 							? "border-blue-200 dark:border-blue-900 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20"
 							: "border-purple-200 dark:border-purple-900 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20"
-					}`}>
+						}`}>
 						<CardHeader>
 							<CardTitle className="flex items-center gap-2">
 								<Target className="size-5" />
@@ -861,13 +855,12 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 								</div>
 								<div className="text-center p-4 rounded-lg bg-white/50 dark:bg-black/20">
 									<p className="text-sm text-muted-foreground">To {selectedGoal === "weight_gain" ? "Gain" : selectedGoal === "weight_loss" ? "Lose" : "Change"}</p>
-									<p className={`text-3xl font-bold ${
-										selectedGoal === "weight_gain" 
-											? "text-blue-600 dark:text-blue-400"
-											: selectedGoal === "weight_loss"
+									<p className={`text-3xl font-bold ${selectedGoal === "weight_gain"
+										? "text-blue-600 dark:text-blue-400"
+										: selectedGoal === "weight_loss"
 											? "text-green-600 dark:text-green-400"
 											: "text-purple-600 dark:text-purple-400"
-									}`}>
+										}`}>
 										{nutritionPlan.weightDifference}
 									</p>
 									<p className="text-xs text-muted-foreground mt-1">kg</p>
@@ -880,10 +873,10 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 									<p className="text-xs text-muted-foreground mt-1">
 										{nutritionPlan.estimatedWeeks > 0 ? `weeks (~${Math.ceil(nutritionPlan.estimatedWeeks / 4)} months)` : "maintenance"}
 									</p>
+								</div>
 							</div>
-						</div>
-					</CardContent>
-				</Card>
+						</CardContent>
+					</Card>
 
 					{/* Exercise Progress Card */}
 					{exerciseStats && (
@@ -1008,7 +1001,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 								<p className="text-muted-foreground mb-4">
 									Start tracking your workouts with our AI-powered exercise tracker!
 								</p>
-								<Button 
+								<Button
 									onClick={() => window.location.href = '/dashboard/posture'}
 									className="gap-2"
 								>
@@ -1073,9 +1066,9 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 									{nutritionPlan.targetCalories}
 								</p>
 								<p className="text-muted-foreground mt-2">calories per day</p>
-						</div>
-					</CardContent>
-				</Card>
+							</div>
+						</CardContent>
+					</Card>
 
 					{/* Macronutrients Breakdown */}
 					<Card className="max-w-6xl mx-auto">
@@ -1095,14 +1088,14 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 									<div className="flex items-center gap-3">
 										<div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/30">
 											<Drumstick className="size-6 text-red-600 dark:text-red-400" />
-			</div>
+										</div>
 										<div>
 											<p className="text-sm text-muted-foreground">Protein</p>
 											<p className="text-2xl font-bold text-foreground">
 												{nutritionPlan.protein}g
-												</p>
-											</div>
+											</p>
 										</div>
+									</div>
 									<div className="w-full bg-muted rounded-full h-3">
 										<div
 											className="bg-red-600 h-3 rounded-full"
@@ -1114,7 +1107,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 									<p className="text-xs text-muted-foreground">
 										{Math.round((nutritionPlan.protein * 4 / nutritionPlan.targetCalories) * 100)}% of daily calories
 									</p>
-									</div>
+								</div>
 
 								{/* Carbs */}
 								<div className="space-y-3">
@@ -1207,9 +1200,9 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 					{/* Action Buttons */}
 					<div className="flex justify-center gap-4 flex-wrap">
 						{hasExistingGoal && (
-							<Button 
-								variant="ghost" 
-								size="lg" 
+							<Button
+								variant="ghost"
+								size="lg"
 								onClick={() => {
 									setStep(1);
 									setSelectedGoal(null);
@@ -1248,7 +1241,7 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 
 					{/* Tips Card */}
 					<Card className="max-w-6xl mx-auto border-green-200 dark:border-green-900 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20">
-				<CardContent className="pt-6">
+						<CardContent className="pt-6">
 							<h3 className="text-lg font-semibold text-foreground mb-3">
 								💪 Pro Tips for Success
 							</h3>
@@ -1260,8 +1253,8 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 								<li>✓ Drink water throughout the day, especially before meals</li>
 								<li>✓ Take progress photos and measurements weekly</li>
 							</ul>
-				</CardContent>
-			</Card>
+						</CardContent>
+					</Card>
 
 					{/* AI Fitness Coach Chatbot */}
 					<Card className="max-w-6xl mx-auto border-purple-200 dark:border-purple-900 shadow-lg">
@@ -1341,11 +1334,10 @@ ${conversationHistory ? `Previous conversation:\n${conversationHistory}\n\n` : "
 												</div>
 											)}
 											<div
-												className={`max-w-[80%] rounded-xl px-3 py-2 ${
-													message.role === "user"
-														? "bg-primary text-primary-foreground"
-														: "bg-muted text-foreground"
-												}`}
+												className={`max-w-[80%] rounded-xl px-3 py-2 ${message.role === "user"
+													? "bg-primary text-primary-foreground"
+													: "bg-muted text-foreground"
+													}`}
 											>
 												<p className="text-sm whitespace-pre-wrap leading-relaxed">
 													{message.content}

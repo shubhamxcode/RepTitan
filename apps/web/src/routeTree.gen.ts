@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -21,11 +20,6 @@ import { Route as DashboardHealthRouteImport } from './routes/dashboard/health'
 import { Route as DashboardGoalsRouteImport } from './routes/dashboard/goals'
 import { Route as AuthLoginRouteImport } from './routes/auth/Login'
 
-const DocsRoute = DocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -82,7 +76,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
   '/dashboard/goals': typeof DashboardGoalsRoute
   '/dashboard/health': typeof DashboardHealthRoute
@@ -94,7 +87,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
   '/dashboard/goals': typeof DashboardGoalsRoute
   '/dashboard/health': typeof DashboardHealthRoute
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/docs': typeof DocsRoute
   '/auth/Login': typeof AuthLoginRoute
   '/dashboard/goals': typeof DashboardGoalsRoute
   '/dashboard/health': typeof DashboardHealthRoute
@@ -123,7 +114,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/dashboard'
-    | '/docs'
     | '/auth/Login'
     | '/dashboard/goals'
     | '/dashboard/health'
@@ -135,7 +125,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
-    | '/docs'
     | '/auth/Login'
     | '/dashboard/goals'
     | '/dashboard/health'
@@ -148,7 +137,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/dashboard'
-    | '/docs'
     | '/auth/Login'
     | '/dashboard/goals'
     | '/dashboard/health'
@@ -162,19 +150,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRouteWithChildren
-  DocsRoute: typeof DocsRoute
   AuthLoginRoute: typeof AuthLoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/docs': {
-      id: '/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -273,7 +253,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRouteWithChildren,
-  DocsRoute: DocsRoute,
   AuthLoginRoute: AuthLoginRoute,
 }
 export const routeTree = rootRouteImport

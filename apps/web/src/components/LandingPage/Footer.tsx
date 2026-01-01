@@ -7,7 +7,6 @@ export default function Footer() {
 			<div
 				className="absolute inset-0 opacity-20 grayscale mix-blend-overlay"
 				style={{
-					backgroundImage: 'url(/images/intro.png)',
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',
 				}}
@@ -25,11 +24,6 @@ export default function Footer() {
 								<li>
 									<Link to="/" className="text-gray-400 hover:text-red-500 transition-colors text-sm hover:translate-x-1 inline-block duration-300">
 										Sign up for Free
-									</Link>
-								</li>
-								<li>
-									<Link to="/" className="text-gray-400 hover:text-red-500 transition-colors text-sm hover:translate-x-1 inline-block duration-300">
-										Download App
 									</Link>
 								</li>
 								<li>
@@ -86,11 +80,7 @@ export default function Footer() {
 						<div>
 							<h3 className="text-lg font-bold mb-4 text-red-600 uppercase tracking-widest">&gt; DATABASE</h3>
 							<ul className="space-y-2">
-								<li>
-									<Link to="/docs" className="text-gray-400 hover:text-red-500 transition-colors text-sm hover:translate-x-1 inline-block duration-300">
-										Documentation
-									</Link>
-								</li>
+
 								<li>
 									<Link to="/" className="text-gray-400 hover:text-red-500 transition-colors text-sm hover:translate-x-1 inline-block duration-300">
 										Exercise Library
